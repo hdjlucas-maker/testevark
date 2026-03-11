@@ -75,8 +75,10 @@ function salvarLead(){
     return;
   }
 
+  // Envio com no-cors para evitar bloqueio
   fetch("https://script.google.com/macros/s/AKfycbwJUoOy8MUSjaLozDhimhpZjvG0Jvb_8zUkIV_n9nHS-otKX1DN6F2gjHW4CVse0cA/exec", {
     method: "POST",
+    mode: "no-cors",
     headers: {
       "Content-Type": "application/json"
     },
@@ -88,9 +90,9 @@ function salvarLead(){
       respostas: respostas
     })
   })
-  .then(response => response.text())
-  .then(data => {
-    console.log("Resposta do servidor:", data);
+  .then(() => {
+    // Não conseguimos ler a resposta por causa do no-cors,
+    // mas sabemos que foi enviado
     mostrarResultado();
   })
   .catch(error => {
