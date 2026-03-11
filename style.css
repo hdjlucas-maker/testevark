@@ -1,9 +1,8 @@
 body{
 
-font-family:Arial, sans-serif;
+font-family:Arial;
 background:#f1f3f6;
 margin:0;
-padding:20px;
 
 }
 
@@ -15,14 +14,20 @@ background:white;
 padding:30px;
 margin-top:40px;
 border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+box-shadow:0 0 10px rgba(0,0,0,0.1);
 
 }
 
 h1{
 
 text-align:center;
-margin-bottom:20px;
+
+}
+
+.sub{
+
+text-align:center;
+color:#666;
 
 }
 
@@ -31,8 +36,7 @@ margin-bottom:20px;
 height:10px;
 background:#ddd;
 border-radius:5px;
-margin-bottom:25px;
-overflow:hidden;
+margin-bottom:20px;
 
 }
 
@@ -42,49 +46,37 @@ height:10px;
 background:#007bff;
 width:0%;
 border-radius:5px;
-transition:width 0.3s ease;
+transition:width 0.3s;
 
 }
 
 .option{
 
 display:block;
-padding:14px;
+padding:12px;
 border:1px solid #ddd;
-border-radius:8px;
-margin:10px 0;
+border-radius:6px;
+margin:8px 0;
 cursor:pointer;
-transition:all 0.2s;
-font-size:15px;
 
 }
 
 .option:hover{
 
-background:#f0f7ff;
-border-color:#007bff;
-transform:scale(1.02);
+background:#f5f5f5;
 
 }
 
 button{
 
-padding:14px 25px;
+padding:12px 25px;
 border:none;
 background:#007bff;
 color:white;
-border-radius:8px;
+border-radius:6px;
 cursor:pointer;
 margin-top:20px;
-font-size:16px;
 width:100%;
-transition:background 0.2s;
-
-}
-
-button:hover{
-
-background:#0056b3;
 
 }
 
@@ -92,46 +84,19 @@ background:#0056b3;
 #leadForm select{
 
 width:100%;
-padding:12px;
-margin-top:12px;
+padding:10px;
+margin-top:10px;
 border:1px solid #ccc;
 border-radius:6px;
-font-size:15px;
-
-}
-
-#leadForm input:focus,
-#leadForm select:focus{
-
-outline:none;
-border-color:#007bff;
 
 }
 
 #resultado{
 
 display:none;
-margin-top:25px;
+margin-top:20px;
 background:#f8f9fa;
-padding:25px;
-border-radius:10px;
-text-align:center;
-
-}
-
-@media (max-width:600px){
-
-.container{
-
-margin-top:10px;
 padding:20px;
-
-}
-
-h1{
-
-font-size:22px;
-
-}
+border-radius:8px;
 
 }
