@@ -1,51 +1,62 @@
-function salvarLead(){
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
 
-let nome=document.getElementById("nome").value
-let email=document.getElementById("email").value
-let whatsapp=document.getElementById("whatsapp").value
-let interesse=document.getElementById("interesse").value
+<meta charset="UTF-8">
+<title>Teste de Estilo de Aprendizagem</title>
 
-if(!nome || !email || !whatsapp){
+<link rel="stylesheet" href="style.css">
 
-alert("Preencha todos os campos")
-return
+</head>
 
-}
+<body>
 
-fetch("https://script.google.com/macros/s/AKfycbwJUoOy8MUSjaLozDhimhpZjvG0Jvb_8zUkIV_n9nHS-otKX1DN6F2gjHW4CVse0cA/exec",{
+<div class="container">
 
-method:"POST",
+<h1>Descubra seu Estilo de Aprendizagem</h1>
 
-headers:{
-"Content-Type":"application/json"
-},
+<p class="sub">
+Responda 16 perguntas rápidas e descubra como você aprende melhor.
+</p>
 
-body:JSON.stringify({
+<div class="progress">
+<div class="progress-bar" id="progress"></div>
+</div>
 
-nome:nome,
-email:email,
-whatsapp:whatsapp,
-interesse:interesse
+<div id="quiz"></div>
 
-})
+<div id="leadForm" style="display:none">
 
-})
+<h2>Veja seu resultado</h2>
 
-.then(response => response.text())
-.then(data => {
+<p>Informe seus dados para receber seu resultado.</p>
 
-console.log("Lead salvo:",data)
+<input type="text" id="nome" placeholder="Seu nome">
 
-mostrarResultado()
+<input type="email" id="email" placeholder="Seu email">
 
-})
+<input type="tel" id="whatsapp" placeholder="WhatsApp">
 
-.catch(error => {
+<select id="interesse">
 
-console.error("Erro:",error)
+<option>O que você deseja aprender?</option>
+<option>Programação</option>
+<option>Inglês</option>
+<option>Marketing Digital</option>
+<option>Concursos</option>
+<option>Outro</option>
 
-mostrarResultado()
+</select>
 
-})
+<button onclick="salvarLead()">Ver meu resultado</button>
 
-}
+</div>
+
+<div id="resultado"></div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
