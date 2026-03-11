@@ -198,8 +198,28 @@
         return;
       }
 
-      // Aqui você pode integrar com seu backend ou Google Apps Script
-      mostrarResultado();
+      fetch("https://script.google.com/macros/s/AKfycbwJUoOy8MUSjaLozDhimhpZjvG0Jvb_8zUkIV_n9nHS-otKX1DN6F2gjHW4CVse0cA/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nome: nome,
+          email: email,
+          whatsapp: whatsapp,
+          interesse: interesse,
+          respostas: respostas
+        })
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log("Resposta do servidor:", data);
+        mostrarResultado();
+      })
+      .catch(error => {
+        console.error("Erro:", error);
+        mostrarResultado();
+      });
     }
 
     function mostrarResultado(){
@@ -229,3 +249,5 @@
 
     mostrarPergunta();
   </script>
+</body>
+</html>
