@@ -1,46 +1,74 @@
-document.getElementById("leadForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz + Lead</title>
+</head>
+<body>
+  <form id="leadForm">
+    <h2>Dados Pessoais</h2>
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+    <input type="text" id="interesse" placeholder="Interesse" required>
 
-  // Dados pessoais
-  const nome = document.getElementById("nome").value;
-  const email = document.getElementById("email").value;
-  const whatsapp = document.getElementById("whatsapp").value;
-  const interesse = document.getElementById("interesse").value;
+    <h2>Quiz</h2>
+    <p>Qual seu estilo de aprendizagem?</p>
+    <label><input type="radio" name="pergunta1" value="Visual"> Visual</label>
+    <label><input type="radio" name="pergunta1" value="Auditivo"> Auditivo</label>
+    <label><input type="radio" name="pergunta1" value="Cinestésico"> Cinestésico</label>
 
-  // Captura automática das respostas do quiz
-  const respostas = {};
-  document.querySelectorAll("input[type=radio]:checked, input[type=checkbox]:checked").forEach(input => {
-    respostas[input.name] = input.value;
-  });
+    <p>Você prefere estudar em grupo ou sozinho?</p>
+    <label><input type="radio" name="pergunta2" value="Grupo"> Grupo</label>
+    <label><input type="radio" name="pergunta2" value="Sozinho"> Sozinho</label>
 
-  // Monta o objeto para enviar
-  const payload = {
-    Nome: nome,
-    Email: email,
-    WhatsApp: whatsapp,
-    Interesse: interesse,
-    Data: new Date().toISOString(),
-    ...respostas // espalha todas as respostas do quiz
-  };
+    <p>Qual horário você rende mais?</p>
+    <label><input type="radio" name="pergunta3" value="Manhã"> Manhã</label>
+    <label><input type="radio" name="pergunta3" value="Tarde"> Tarde</label>
+    <label><input type="radio" name="pergunta3" value="Noite"> Noite</label>
 
-  // Envio para o SheetMonkey
-  fetch("https://api.sheetmonkey.io/form/o3eybVdfWTEE3mZH3ztuch", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(res => {
-    if (res.ok) {
-      document.getElementById("leadForm").reset();
-      alert("Respostas enviadas com sucesso!");
-    } else {
-      alert("Erro ao enviar os dados.");
-    }
-  })
-  .catch(error => {
-    console.error("Erro:", error);
-    alert("Falha na conexão.");
-  });
-});
+    <button type="submit">Enviar</button>
+  </form>
+
+  <div id="mensagem"></div>
+
+  <script>
+    document.getElementById("leadForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Dados pessoais
+      const payload = {
+        Nome: document.getElementById("nome").value,
+        Email: document.getElementById("email").value,
+        WhatsApp: document.getElementById("whatsapp").value,
+        Interesse: document.getElementById("interesse").value,
+        Data: new Date().toISOString()
+      };
+
+      // Respostas do quiz
+      document.querySelectorAll("input[type=radio]:checked, input[type=checkbox]:checked").forEach(input => {
+        payload[input.name] = input.value;
+      });
+
+      // Envio para SheetMonkey
+      fetch("https://api.sheetmonkey.io/form/o3eybVdfWTEE3mZH3ztuch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => {
+        if (res.ok) {
+          document.getElementById("leadForm").reset();
+          document.getElementById("mensagem").innerHTML = "<p style='color:green'>Respostas enviadas com sucesso!</p>";
+        } else {
+          document.getElementById("mensagem").innerHTML = "<p style='color:red'>Erro ao enviar os dados.</p>";
+        }
+      })
+      .catch(error => {
+        console.error("Erro:", error);
+        document.getElementById("mensagem").innerHTML = "<p style='color:red'>Falha na conexão.</p>";
+      });
+    });
+  </script>
+</body>
+</html>
