@@ -1,129 +1,49 @@
-const perguntas = [
-  "Quando você aprende algo novo prefere:",
-  "Quando alguém explica um caminho você prefere:",
-  "Para aprender algo difícil você:",
-  "Quando estuda para prova você:",
-  "Quando lembra de algo você lembra:",
-  "Quando está aprendendo um software novo:",
-  "Quando alguém te ensina algo:",
-  "Em uma palestra você prefere:",
-  "Quando está resolvendo um problema:",
-  "Quando compra algo novo você:",
-  "Em sala de aula você aprende melhor:",
-  "Quando precisa memorizar algo:",
-  "Se quer aprender algo rápido:",
-  "Quando recebe instruções:",
-  "Quando estuda sozinho:",
-  "Para entender melhor um assunto:"
-];
+document.getElementById("leadForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-const opcoes = [
-  ["Ver diagramas","Ouvir explicação","Ler textos","Praticar"],
-  ["Ver mapa","Ouvir direção","Ler instruções","Descobrir"],
-  ["Fazer esquemas","Conversar","Escrever","Testar"],
-  ["Mapas mentais","Áudio aula","Ler resumos","Exercícios"],
-  ["Imagens","Conversas","Anotações","Experiência"],
-  ["Assistir vídeo","Escutar","Ler manual","Testar"],
-  ["Mostra imagens","Explica falando","Escreve","Demonstra"],
-  ["Slides","Explicação","Texto","Demonstração"],
-  ["Desenha solução","Discute","Escreve","Testa"],
-  ["Vê fotos","Pergunta","Lê descrição","Experimenta"],
-  ["Com imagens","Com explicação","Com leitura","Com prática"],
-  ["Diagramas","Repetir","Escrever","Praticar"],
-  ["Vídeo","Aula","Tutorial","Projeto"],
-  ["Imagens","Explicação","Texto","Demonstração"],
-  ["Esquemas","Fala","Resumo","Prática"],
-  ["Gráficos","Discussão","Leitura","Experiência"]
-];
+  // Dados pessoais
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const whatsapp = document.getElementById("whatsapp").value;
+  const interesse = document.getElementById("interesse").value;
 
-const valores = ["V","A","R","K"];
-let atual = 0;
-let respostas = [];
+  // Captura das respostas do quiz
+  // Exemplo: se cada pergunta tem um input radio com name="pergunta1", "pergunta2" etc.
+  const resposta1 = document.querySelector('input[name="pergunta1"]:checked')?.value || "";
+  const resposta2 = document.querySelector('input[name="pergunta2"]:checked')?.value || "";
+  const resposta3 = document.querySelector('input[name="pergunta3"]:checked')?.value || "";
+  const resposta4 = document.querySelector('input[name="pergunta4"]:checked')?.value || "";
+  const resposta5 = document.querySelector('input[name="pergunta5"]:checked')?.value || "";
 
-function mostrarPergunta(){
-  let q = perguntas[atual];
-  let html = `<h3>Pergunta ${atual+1} de 16</h3>`;
-  html += `<p>${q}</p>`;
-
-  for(let i=0;i<4;i++){
-    html += `<div class="option" onclick="responder('${valores[i]}')">${opcoes[atual][i]}</div>`;
-  }
-
-  document.getElementById("quiz").innerHTML = html;
-  document.getElementById("progress").style.width = ((atual+1)/16*100)+"%";
-}
-
-function responder(valor){
-  respostas.push(valor);
-  atual++;
-  if(atual<16){
-    mostrarPergunta();
-  } else {
-    document.getElementById("quiz").style.display="none";
-    document.getElementById("leadForm").style.display="block";
-  }
-}
-
-function salvarLead(){
-  let nome = document.getElementById("nome").value;
-  let email = document.getElementById("email").value;
-  let whatsapp = document.getElementById("whatsapp").value;
-  let interesse = document.getElementById("interesse").value;
-
-  if(!nome || !email || !whatsapp){
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  // Envio com no-cors para evitar bloqueio
-  fetch("https://script.google.com/macros/s/AKfycbwJUoOy8MUSjaLozDhimhpZjvG0Jvb_8zUkIV_n9nHS-otKX1DN6F2gjHW4CVse0cA/exec", {
+  // Envio para o SheetMonkey
+  fetch("https://api.sheetmonkey.io/form/o3eybVdfWTEE3mZH3ztuch", {
     method: "POST",
-    mode: "no-cors",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      nome: nome,
-      email: email,
-      whatsapp: whatsapp,
-      interesse: interesse,
-      respostas: respostas
+      Nome: nome,
+      Email: email,
+      WhatsApp: whatsapp,
+      Interesse: interesse,
+      Pergunta1: resposta1,
+      Pergunta2: resposta2,
+      Pergunta3: resposta3,
+      Pergunta4: resposta4,
+      Pergunta5: resposta5,
+      Data: new Date().toISOString()
     })
   })
-  .then(() => {
-    // Não conseguimos ler a resposta por causa do no-cors,
-    // mas sabemos que foi enviado
-    mostrarResultado();
+  .then(res => {
+    if (res.ok) {
+      document.getElementById("leadForm").reset();
+      alert("Respostas enviadas com sucesso!");
+    } else {
+      alert("Erro ao enviar os dados.");
+    }
   })
   .catch(error => {
     console.error("Erro:", error);
-    mostrarResultado();
+    alert("Falha na conexão.");
   });
-}
-
-function mostrarResultado(){
-  let V=0,A=0,R=0,K=0;
-  respostas.forEach(r=>{
-    if(r=="V")V++;
-    if(r=="A")A++;
-    if(r=="R")R++;
-    if(r=="K")K++;
-  });
-
-  let maior = Math.max(V,A,R,K);
-  let estilo = "";
-  if(maior==V)estilo="Visual";
-  if(maior==A)estilo="Auditivo";
-  if(maior==R)estilo="Leitura/Escrita";
-  if(maior==K)estilo="Cinestésico";
-
-  document.getElementById("leadForm").style.display="none";
-  let res = document.getElementById("resultado");
-  res.style.display="block";
-  res.innerHTML = `
-    <h2>Seu estilo é: ${estilo}</h2>
-    <button onclick="location.reload()">Refazer teste</button>
-  `;
-}
-
-mostrarPergunta();
+});
