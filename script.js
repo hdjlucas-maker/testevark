@@ -10,7 +10,7 @@ document.getElementById("leadForm").addEventListener("submit", function(e) {
     Data: new Date().toISOString()
   };
 
-  // Respostas do quiz (radio/checkbox)
+  // Respostas do quiz
   document.querySelectorAll("input[type=radio]:checked, input[type=checkbox]:checked").forEach(input => {
     payload[input.name] = input.value;
   });
