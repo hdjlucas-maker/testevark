@@ -1,52 +1,46 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Meu Site</title>
-</head>
-<body>
-  <form id="leadForm">
-    <input type="text" id="nome" placeholder="Nome" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="text" id="whatsapp" placeholder="WhatsApp" required>
-    <input type="text" id="interesse" placeholder="Interesse" required>
-    <button type="submit">Enviar</button>
-  </form>
+document.getElementById("leadForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-  <script>
-    document.getElementById("leadForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+  // Dados pessoais
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const whatsapp = document.getElementById("whatsapp").value;
+  const interesse = document.getElementById("interesse").value;
 
-      const nome = document.getElementById("nome").value;
-      const email = document.getElementById("email").value;
-      const whatsapp = document.getElementById("whatsapp").value;
-      const interesse = document.getElementById("interesse").value;
+  // Captura automática das respostas do quiz
+  const respostas = {};
+  document.querySelectorAll("input[type=radio]:checked, input[type=checkbox]:checked").forEach(input => {
+    respostas[input.name] = input.value;
+  });
 
-      fetch("https://api.sheetmonkey.io/form/o3eybVdfWTEE3mZH3ztuch", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          Nome: nome,
-          Email: email,
-          WhatsApp: whatsapp,
-          Interesse: interesse,
-          Data: new Date().toISOString()
-        })
-      })
-      .then(res => {
-        if (res.ok) {
-          alert("Dados enviados com sucesso!");
-        } else {
-          alert("Erro ao enviar os dados.");
-        }
-      })
-      .catch(error => {
-        console.error("Erro:", error);
-        alert("Falha na conexão.");
-      });
-    });
-  </script>
-</body>
-</html>
+  // Monta o objeto para enviar
+  const payload = {
+    Nome: nome,
+    Email: email,
+    WhatsApp: whatsapp,
+    Interesse: interesse,
+    Data: new Date().toISOString(),
+    ...respostas // espalha todas as respostas do quiz
+  };
+
+  // Envio para o SheetMonkey
+  fetch("https://api.sheetmonkey.io/form/o3eybVdfWTEE3mZH3ztuch", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => {
+    if (res.ok) {
+      document.getElementById("leadForm").reset();
+      alert("Respostas enviadas com sucesso!");
+    } else {
+      alert("Erro ao enviar os dados.");
+    }
+  })
+  .catch(error => {
+    console.error("Erro:", error);
+    alert("Falha na conexão.");
+  });
+});
