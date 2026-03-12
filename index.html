@@ -3,72 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz + Lead</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <form id="leadForm">
-    <h2>Dados Pessoais</h2>
-    <input type="text" id="nome" placeholder="Nome" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="text" id="whatsapp" placeholder="WhatsApp" required>
-    <input type="text" id="interesse" placeholder="Interesse" required>
+  <div class="container">
+    <h1>Quiz de Aprendizagem</h1>
+    <form id="leadForm">
+      <h2>Dados Pessoais</h2>
+      <input type="text" id="nome" placeholder="Nome" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+      <input type="text" id="interesse" placeholder="Interesse" required>
 
-    <h2>Quiz</h2>
-    <p>Qual seu estilo de aprendizagem?</p>
-    <label><input type="radio" name="pergunta1" value="Visual"> Visual</label>
-    <label><input type="radio" name="pergunta1" value="Auditivo"> Auditivo</label>
-    <label><input type="radio" name="pergunta1" value="Cinestésico"> Cinestésico</label>
+      <h2>Quiz</h2>
+      <p>Qual seu estilo de aprendizagem?</p>
+      <label><input type="radio" name="pergunta1" value="Visual"> Visual</label>
+      <label><input type="radio" name="pergunta1" value="Auditivo"> Auditivo</label>
+      <label><input type="radio" name="pergunta1" value="Cinestésico"> Cinestésico</label>
 
-    <p>Você prefere estudar em grupo ou sozinho?</p>
-    <label><input type="radio" name="pergunta2" value="Grupo"> Grupo</label>
-    <label><input type="radio" name="pergunta2" value="Sozinho"> Sozinho</label>
+      <p>Você prefere estudar em grupo ou sozinho?</p>
+      <label><input type="radio" name="pergunta2" value="Grupo"> Grupo</label>
+      <label><input type="radio" name="pergunta2" value="Sozinho"> Sozinho</label>
 
-    <p>Qual horário você rende mais?</p>
-    <label><input type="radio" name="pergunta3" value="Manhã"> Manhã</label>
-    <label><input type="radio" name="pergunta3" value="Tarde"> Tarde</label>
-    <label><input type="radio" name="pergunta3" value="Noite"> Noite</label>
+      <p>Qual horário você rende mais?</p>
+      <label><input type="radio" name="pergunta3" value="Manhã"> Manhã</label>
+      <label><input type="radio" name="pergunta3" value="Tarde"> Tarde</label>
+      <label><input type="radio" name="pergunta3" value="Noite"> Noite</label>
 
-    <button type="submit">Enviar</button>
-  </form>
+      <button type="submit">Enviar</button>
+    </form>
 
-  <div id="mensagem"></div>
+    <div id="mensagem"></div>
+  </div>
 
-  <script>
-    document.getElementById("leadForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      // Dados pessoais
-      const payload = {
-        Nome: document.getElementById("nome").value,
-        Email: document.getElementById("email").value,
-        WhatsApp: document.getElementById("whatsapp").value,
-        Interesse: document.getElementById("interesse").value,
-        Data: new Date().toISOString()
-      };
-
-      // Respostas do quiz
-      document.querySelectorAll("input[type=radio]:checked, input[type=checkbox]:checked").forEach(input => {
-        payload[input.name] = input.value;
-      });
-
-      // Envio para SheetMonkey
-      fetch("https://api.sheetmonkey.io/form/o3eybVdfWTEE3mZH3ztuch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (res.ok) {
-          document.getElementById("leadForm").reset();
-          document.getElementById("mensagem").innerHTML = "<p style='color:green'>Respostas enviadas com sucesso!</p>";
-        } else {
-          document.getElementById("mensagem").innerHTML = "<p style='color:red'>Erro ao enviar os dados.</p>";
-        }
-      })
-      .catch(error => {
-        console.error("Erro:", error);
-        document.getElementById("mensagem").innerHTML = "<p style='color:red'>Falha na conexão.</p>";
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
